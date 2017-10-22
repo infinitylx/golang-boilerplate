@@ -1,12 +1,18 @@
 package server
 
 import (
-	"github.com/faerulsalamun/golang-boilerplate/config"
+	"../config"
+	"../db"
 )
 
+// Init creates and run NewRouter
 func Init() {
 	c := config.GetConfig()
 
-	r := NewRouter()
+	var dbConnect = db.NewConnection(c.GetString("db.host"))
+
+	defer dbConnect.Close()
+
+	r := NewRouter(*dbConnect)
 	r.Run(c.GetString("app.port"))
 }

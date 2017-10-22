@@ -4,26 +4,39 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-var (
-	mgoSession        *mgo.Session
-)
+// Connection DB session store
+type Connection struct {
+	session *mgo.Session
+}
 
-func Init() *mgo.Database {
-	var err error
+// Session open mongo db session
+// var Session *mgo.Session
 
-	mgoSession, err = mgo.Dial("mongodb://localhost:27017")
-
+// NewConnection creates and saves new session, returns connection to db.
+func NewConnection(host string) (conn *Connection) {
+	s, err := mgo.Dial(host)
 	if err != nil {
 		panic(err)
 	}
+	s.SetMode(mgo.Monotonic, true)
+	conn = &Connection{s}
 
-	return mgoSession.DB("test")
-
+	// Session = s
+	return conn
 }
 
-func CloseSession() {
-	mgoSession.Close()
+// Use make something...
+func (conn *Connection) Use(dbName, tableName string) (collection *mgo.Collection) {
+	return conn.session.DB(dbName).C(tableName)
 }
 
+// Clone makes and return session clone
+func (conn *Connection) Clone() *mgo.Session {
+	return conn.session.Clone()
+}
 
-
+// Close session to mongodb.
+func (conn *Connection) Close() {
+	conn.session.Close()
+	return
+}
