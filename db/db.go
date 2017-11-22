@@ -1,31 +1,39 @@
 package db
 
 import (
+	"sync"
 	"gopkg.in/mgo.v2"
 )
 
-// Connection DB session store
-type Connection struct {
-	session *mgo.Session
-}
+var session *mgo.Session
+//var instance *singleton
+var once sync.Once
 
-// var Session *mgo.Session
+//func GetInstance() *singleton {
+//   once.Do(func() {
+//        instance = &singleton{}
+//    })
+//    return instance
+//}
+
 // InitSession open mongo db session
-func (conn *Connection) InitSession(host string){
-	s, err := mgo.Dial(host)
-	if err != nil {
-		panic(err)
-	}
-	s.SetMode(mgo.Monotonic, true)
-	conn.session = s
+func InitSession(host string){
+	once.Do(func() {
+        s, err := mgo.Dial(host)
+        err != nil {
+            panic(err)
+        }
+        s.SetMode(mgo.Monotonic, true)
+        session = s
+    })
 }
 
 // Clone makes and return new session
-func (conn *Connection) Clone() *mgo.Session {
-	return conn.session.Clone()
+func Clone() *mgo.Session {
+	return session.Clone()
 }
 
 // Close session to mongodb.
-func (conn *Connection) Close() {
-	conn.session.Close()
+func Close() {
+	session.Close()
 }
