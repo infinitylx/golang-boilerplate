@@ -8,11 +8,9 @@ import (
 // Init creates and run NewRouter
 func Init() {
 	c := config.GetConfig()
-	mmgo = db.Connection
+	db.InitSession(c.GetString("db.host"))
 
-	mmgo.InitSession(c.GetString("db.host"))
-
-	defer mmgo.Close()
+	defer db.Close()
 
 	r := NewRouter()
 	r.Run(c.GetString("app.port"))
