@@ -10,13 +10,11 @@ type User struct {
 
 func (h User) GetAll() ([] User, error) {
 
-	con := db.Init().C("user")
-
-	defer db.CloseSession()
+	s := db.Clone()
+	defer s.CloseSession()
 
 	var result [] User
-
-	err := con.Find(nil).All(&result)
+	err := s.DB("devdb").c("Users").Find(nil).All(&result)
 
 	if err != nil {
 		return nil, err
