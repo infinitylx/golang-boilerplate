@@ -34,3 +34,4 @@ _testmain.go
 /.idea
 vendor/*
 !vendor/vendor.json
+.vscode/*
