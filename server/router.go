@@ -8,13 +8,13 @@ import (
 )
 
 // NewRouter return router
-func NewRouter(dbConnect db.Connection) *gin.Engine {
+func NewRouter() *gin.Engine {
 	router := gin.New()
 
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 	router.Use(middlewares.AuthMiddleware())
-	router.Use(middlewares.Connect(&dbConnect))
+
 	v1 := router.Group("api/v1")
 	{
 
