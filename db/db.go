@@ -1,11 +1,12 @@
 package db
 
 import (
-	"sync"
 	"gopkg.in/mgo.v2"
+	"sync"
 )
 
 var session *mgo.Session
+
 //var instance *singleton
 var once sync.Once
 
@@ -17,15 +18,15 @@ var once sync.Once
 //}
 
 // InitSession open mongo db session
-func InitSession(host string){
+func InitSession(host string) {
 	once.Do(func() {
-        s, err := mgo.Dial(host)
-        err != nil {
-            panic(err)
-        }
-        s.SetMode(mgo.Monotonic, true)
-        session = s
-    })
+		s, err := mgo.Dial(host)
+		if err != nil {
+			panic(err)
+		}
+		s.SetMode(mgo.Monotonic, true)
+		session = s
+	})
 }
 
 // Clone makes and return new session

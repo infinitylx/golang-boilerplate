@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 
-	"../db"
 	"../models"
 	"github.com/gin-gonic/gin"
 )
@@ -15,11 +14,9 @@ var userModel = new(models.User)
 
 //GetAll return all users
 func (u UserController) GetAll(c *gin.Context) {
-	conn := c.MustGet("db").(*db.Connection)
-	defer conn.Close()
-
-	var result []models.User
-	err := conn.Use("eulist", "user").Find(nil).All(&result)
+	var user = models.User{}
+	var result, err = user.GetAll()
+	// err := conn.Use("eulist", "user").Find(nil).All(&result)
 
 	// if err != nil {
 	// 	return nil, err
@@ -37,17 +34,17 @@ func (u UserController) GetAll(c *gin.Context) {
 
 // CreateUser creates user
 func (u UserController) CreateUser(c *gin.Context) {
-	conn := c.MustGet("db").(*db.Connection)
-	defer conn.Close()
+	// conn := c.MustGet("db").(*db.Connection)
+	// defer conn.Close()
 
 	nu := models.User{}
 	nu.Name = "Vasy"
-	err := conn.Use("eulist", "user").Insert(nu)
-	if err != nil {
-		c.JSON(500, gin.H{"message": "Can't insert", "error": err})
-		c.Abort()
-		return
-	}
+	// // err := conn.Use("eulist", "user").Insert(nu)
+	// if err != nil {
+	// 	c.JSON(500, gin.H{"message": "Can't insert", "error": err})
+	// 	c.Abort()
+	// 	return
+	// }
 	c.Redirect(http.StatusMovedPermanently, "api/v1")
 
 }

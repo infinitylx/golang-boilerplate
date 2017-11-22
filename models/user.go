@@ -1,20 +1,22 @@
 package models
 
 import (
-	"github.com/faerulsalamun/golang-boilerplate/db"
+	"../db"
 )
 
+// User is user
 type User struct {
 	Name string `json:"name"`
 }
 
-func (h User) GetAll() ([] User, error) {
+// GetAll return list of all users
+func (h User) GetAll() ([]User, error) {
 
 	s := db.Clone()
-	defer s.CloseSession()
+	defer s.Close()
 
-	var result [] User
-	err := s.DB("devdb").c("Users").Find(nil).All(&result)
+	var result []User
+	err := s.DB("devdb").C("Users").Find(nil).All(&result)
 
 	if err != nil {
 		return nil, err

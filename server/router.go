@@ -2,7 +2,6 @@ package server
 
 import (
 	"../controllers"
-	"../db"
 	"../middlewares"
 	"github.com/gin-gonic/gin"
 )
