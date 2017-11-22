@@ -9,28 +9,18 @@ type Connection struct {
 	session *mgo.Session
 }
 
-// Session open mongo db session
 // var Session *mgo.Session
-
-// NewConnection creates and saves new session, returns connection to db.
-func NewConnection(host string) (conn *Connection) {
+// InitSession open mongo db session
+func (conn *Connection) InitSession(host string){
 	s, err := mgo.Dial(host)
 	if err != nil {
 		panic(err)
 	}
 	s.SetMode(mgo.Monotonic, true)
-	conn = &Connection{s}
-
-	// Session = s
-	return conn
+	conn.session = s
 }
 
-// Use make something...
-func (conn *Connection) Use(dbName, tableName string) (collection *mgo.Collection) {
-	return conn.session.DB(dbName).C(tableName)
-}
-
-// Clone makes and return session clone
+// Clone makes and return new session
 func (conn *Connection) Clone() *mgo.Session {
 	return conn.session.Clone()
 }
@@ -38,5 +28,4 @@ func (conn *Connection) Clone() *mgo.Session {
 // Close session to mongodb.
 func (conn *Connection) Close() {
 	conn.session.Close()
-	return
 }
