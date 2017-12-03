@@ -38,13 +38,14 @@ func (u UserController) CreateUser(c *gin.Context) {
 	// defer conn.Close()
 
 	nu := models.User{}
-	nu.Name = "Vasy"
+	nu.UserName = "Vasy"
+	nu.SaveUser()
 	// // err := conn.Use("eulist", "user").Insert(nu)
 	// if err != nil {
 	// 	c.JSON(500, gin.H{"message": "Can't insert", "error": err})
 	// 	c.Abort()
 	// 	return
 	// }
-	c.Redirect(http.StatusMovedPermanently, "api/v1")
+	c.Redirect(http.StatusFound, "/api/v1")
 
 }
