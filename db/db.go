@@ -38,3 +38,17 @@ func Clone() *mgo.Session {
 func Close() {
 	session.Close()
 }
+
+// Get runs given query and return json
+func Get(query string, col string, result interface{}) err error {
+	s := Clone()
+	defer s.Close()
+
+	var result []User
+	err := s.DB("devdb").C(col).Find(nil).All(&result)
+
+    // use named return
+    // return err
+    return
+}
+
